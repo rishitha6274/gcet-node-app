@@ -7,6 +7,11 @@ app.use(cors());
 
 const users = [];
 
+app.use((err, req, res, next) => {
+  console.error("ERROR:", err);
+  res.status(500).json({ error: "Internal Server Error" });
+});
+
 app.listen(8080, () => {
   console.log("Server Started on port 8080");
 });
@@ -16,7 +21,13 @@ app.get("/", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
+  console.log("Register request body:", req.body);
   const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
   users.push({ name, email, password });
   return res.json({ message: "User registered successfully" });
 });
