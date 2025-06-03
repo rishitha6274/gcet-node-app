@@ -45,7 +45,11 @@ app.get("/name", (req, res) => {
   return res.send("Hello Rishitha!"); 
 });
 
-app.get("/products", async(req, res) => {
-  const products = await products.find();
+app.get("/products", (req, res) => {
+  const products = [
+    { id: 1, name: "Laptop", price: 999 },
+    { id: 2, name: "Phone", price: 499 },
+    { id: 3, name: "Headphones", price: 199 }
+  ];
   return res.json(products);
 });
