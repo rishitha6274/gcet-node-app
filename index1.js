@@ -1,4 +1,3 @@
-
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -17,6 +16,12 @@ const userSchema = mongoose.Schema({
     email: {type: String},
     pass: {type: String},
 });
+
+const productSchema = mongoose.Schema({
+    name: { type: String },
+    price: { type: Number },
+});
+const product = mongoose.model("Product", productSchema)
 
 const user = mongoose.model("User", userSchema);
 
@@ -45,11 +50,11 @@ app.get("/name", (req, res) => {
   return res.send("Hello Rishitha!"); 
 });
 
-app.get("/products", (req, res) => {
-  const products = [
-    { id: 1, name: "Laptop", price: 999 },
-    { id: 2, name: "Phone", price: 499 },
-    { id: 3, name: "Headphones", price: 199 }
-  ];
-  return res.json(products);
+app.get("/products", async (req, res) => {
+  try {
+    const products = await product.find(); 
+    return res.json(products);
+  } catch (error) {
+    return res.status(500).json({ message: "Error fetching products", error });
+  }
 });
