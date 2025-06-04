@@ -3,7 +3,7 @@ import productModel from "../models/productModel.js";
 
 const productRouter = express.Router()
 
-productRouter.get("/products", async (req, res) => {
+productRouter.get("/", async (req, res) => {
   try {
     const products = await productModel.find(); 
     return res.json(products);
