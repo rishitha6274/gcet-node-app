@@ -3,15 +3,22 @@ import mongoose from "mongoose";
 import cors from "cors";
 import userRouter from "./routes/userRoutes.js";
 import productRouter from "./routes/productRoutes.js";
+import orderRouter from "./routes/orderRoutes.js";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 
 const app = express();
+
+const MONGODB_URI = process.env.MONGODB_URI
+
 app.use(cors()); 
 app.use(express.json());
 
-app.listen(8080, () => {
-    mongoose.connect("mongodb://localhost:27017/gcet");
-  console.log("Server Started on port 8080");
-});
+
+
+app.use("/orders", orderRouter); 
 
 app.use("/users", userRouter);
 
@@ -30,3 +37,13 @@ app.get("/name", (req, res) => {
   return res.send("Hello Rishitha!"); 
 });
 
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
+    app.listen(8080, () => {
+      console.log("Server started on port 8080");
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
