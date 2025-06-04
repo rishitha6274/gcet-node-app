@@ -12,9 +12,5 @@ productRouter.get('/', async (req, res) => {
   }
 });
 
-productRouter.get('/test', (req, res) => {
-  res.json({ message: 'Products route working!' });
-});
-console.log("✅ Product router loaded");
-
 export default productRouter;
+
