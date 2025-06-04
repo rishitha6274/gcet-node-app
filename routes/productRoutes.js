@@ -1,15 +1,20 @@
-import express from 'express'
-import productModel from "../models/productModel.js";
+import express from 'express';
+import productModel from '../models/productModel.js';
 
-const productRouter = express.Router()
+const productRouter = express.Router();
 
-productRouter.get("/", async (req, res) => {
+productRouter.get('/', async (req, res) => {
   try {
-    const products = await productModel.find(); 
-    return res.json(products);
+    const products = await productModel.find();
+    res.json(products);
   } catch (error) {
-    return res.status(500).json({ message: "Error", error });
+    res.status(500).json({ message: 'Error fetching products', error });
   }
 });
 
-export default productRouter
+productRouter.get('/test', (req, res) => {
+  res.json({ message: 'Products route working!' });
+});
+console.log("✅ Product router loaded");
+
+export default productRouter;

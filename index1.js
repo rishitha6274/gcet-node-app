@@ -37,6 +37,7 @@ app.get("/name", (req, res) => {
   return res.send("Hello Rishitha!"); 
 });
 
+
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
@@ -47,3 +48,5 @@ mongoose
   .catch((error) => {
     console.log(error);
   });
+
+  
