@@ -12,11 +12,15 @@ productRouter.get('/', async (req, res) => {
   }
 });
 
-productRouter.post("/add", async(req, res)=>{
-    const {name,description,imgUrl,price} = req.body
-    const result = await productModel.insertOne({name, description, imgUrl, price});
+productRouter.post("/add", async (req, res) => {
+  try {
+    const { name, description, imgUrl, price } = req.body;
+    const newProduct = new productModel({ name, description, imgUrl, price });
+    const result = await newProduct.save();
     return res.json(result);
-})
-
+  } catch (error) {
+    res.status(500).json({ message: "Error adding product", error });
+  }
+});
 export default productRouter;
 
