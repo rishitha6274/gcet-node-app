@@ -12,5 +12,11 @@ productRouter.get('/', async (req, res) => {
   }
 });
 
+productRouter.post("/add", async(req, res)=>{
+    const {name,description,imgUrl,price} = req.body
+    const result = await productModel.insertOne({name, description, imgUrl, price});
+    return res.json(result);
+})
+
 export default productRouter;
 
