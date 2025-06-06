@@ -37,16 +37,29 @@ userRouter.post("/login", async (req, res) => {
 });
 
 
-userRouter.get("/:id", async(req, res)=>{
-    const {name,email,pass} = req.params.id
-    const result = await userModel.findOne({email});
+userRouter.get("/user/:email", async (req, res) => {
+  const email = req.params.email;
+  try {
+    const result = await userModel.findOne({ email });
+    if (!result) return res.status(404).json({ message: "User not found" });
     return res.json(result);
-})
+  } catch (err) {
+    console.error("Fetch user error:", err);
+    res.status(500).json({ message: "Error fetching user" });
+  }
+});
 
-userRouter.get("/:id/name", async(req, res)=>{
-    const email = req.params.id
-    const result = await userModel.findOne({email},{_id:0,name:1});
+userRouter.get("/user/:email/name", async (req, res) => {
+  const email = req.params.email;
+  try {
+    const result = await userModel.findOne({ email }, { _id: 0, name: 1 });
+    if (!result) return res.status(404).json({ message: "User not found" });
     return res.json(result);
-})
+  } catch (err) {
+    console.error("Fetch user name error:", err);
+    res.status(500).json({ message: "Error fetching user name" });
+  }
+});
+
 
 export default userRouter
