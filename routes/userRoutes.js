@@ -3,15 +3,21 @@ import userModel from "../models/userModel.js";
 import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
 const SECRET_KEY = "helloworld";
+import auth from "../middleware/auth.js";
 
 const userRouter = express.Router()
 
+userRouter.get("/all", auth, async (req, res) => {
+  const users = await userModel.find();
+  res.json(users);
+});
+
 userRouter.post("/register", async (req, res) => {
-  const { name, email, pass } = req.body;
+  const { name, email, pass, role } = req.body;
   
   try {
     const hashpassword = await bcrypt.hash(pass, 10);
-    const result = await userModel.create({ name, email, pass:hashpassword });
+    const result = await userModel.create({ name, email, pass:hashpassword, role: role });
     res.json({ message: "User registered successfully", user: result });
   } catch (err) {
     console.error("Registration error:", err);
@@ -26,7 +32,7 @@ userRouter.post("/login", async (req, res) => {
   if(!matchPassword){
     return res.status(400).json({message: "Invalid Password"});
   }
-  const token = jwt.sign({email: result.email, id: result._id}, SECRET_KEY);
+  const token = jwt.sign({email: result.email,role: result.role, id: result._id}, SECRET_KEY);
   return res.json({
     user: result, token: token
     // token: "dummy_token_123", 
