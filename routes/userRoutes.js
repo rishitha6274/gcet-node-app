@@ -3,14 +3,21 @@ import userModel from "../models/userModel.js";
 import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
 const SECRET_KEY = "helloworld";
-import auth from "../middleware/auth.js";
+import auth, { authorize } from "../middleware/auth.js";
 
 const userRouter = express.Router()
 
-userRouter.get("/all", auth, async (req, res) => {
+userRouter.get("/all", auth,authorize, async (req, res) => {
   const users = await userModel.find();
   res.json(users);
 });
+
+userRouter.delete("/:id", auth, authorize,  async (req, res) => {
+  const id = req.params.id;
+  const user = await userModel.findByIdAndDelete(id);
+  res.json(user);
+});
+
 
 userRouter.post("/register", async (req, res) => {
   const { name, email, pass, role } = req.body;
